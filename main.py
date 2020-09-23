@@ -1,7 +1,7 @@
 from sys import argv
 from pathlib import Path
 
-from parser import Parser
+from vparser import Parser
 from code_writer import CodeWriter
 from command_type import CommandType
 
@@ -22,7 +22,12 @@ def main():
 
     # March through the input file,
     # parsing each line generating code from it
-
+    while vm_parser.has_more_commands():
+        vm_parser.advance()
+        
+        if vm_parser.command_type() == CommandType.C_PUSH:
+            asm_writer.write_push_pop(vm_parser.command_type(), vm_parser.get_tokens())
+        
 
 if __name__ == '__main__':
     main()

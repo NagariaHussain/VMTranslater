@@ -1,4 +1,6 @@
+# The command type Enum
 from command_type import CommandType
+
 class Parser:
     '''Parses each VM command into its lexical elements'''
 
@@ -10,6 +12,8 @@ class Parser:
 
     # Are there more commands in input?
     def has_more_commands(self):
+        # TODO: consider comments and empty lines
+        
         # Read a line from the input stream
         line = self.in_stream.readline()
 
@@ -25,7 +29,10 @@ class Parser:
     # Reads the next command from the input
     # and makes it the current command
     def advance(self):
+        # Update current command
         self.current_command = self.current_line
+        # Tokenize the current command
+        self.tokenize()
 
     # Returns a constant representing 
     # a command type
@@ -45,7 +52,8 @@ class Parser:
     # get arg2
     def get_arg2(self):
         return self.tokens['arg2']
-    
+
+    # tokenize the input lines    
     def tokenize(self):
         self.tokens = {}
 
@@ -63,3 +71,6 @@ class Parser:
             # push/pop
             self.tokens['op_type'] = tokens[0]
 
+    # get tokens
+    def get_tokens(self):
+        return self.tokens
