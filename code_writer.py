@@ -17,20 +17,51 @@ class CodeWriter:
         # If the command type is push
         if command_type == CommandType.C_PUSH:
             if tokens['arg1'] == 'constant':
-                code = f'''@{tokens['arg2']}
+                # push constant i
+                code = f'''// push constant {tokens['arg2']}
+@{tokens['arg2']}
 D = A
 @SP
 A = M
 M = D
 @SP
 M = M + 1
+''' 
+            elif tokens['arg1'] == 'local':
+                # push local i
+                code = f'''// push local {tokens['arg2']}
+@{tokens['arg2']}
+D = A
+@LCL 
+A = D + M
+D = M
+@SP
+A = M
+M = D
+@SP
+M = M + 1
 '''
-                self.out_stream.write(code)
 
         # If the command type is pop
         elif command_type == CommandType.C_POP:
-            pass
-
+            if tokens['arg1'] == 'local':
+                code = f'''// pop local {tokens['arg2']}
+@{tokens['arg2']}
+D = A
+@LCL
+D = D + M
+@SP
+A = M
+M = D
+@SP
+M = M - 1
+@SP
+D = M
+A = A + 1
+A = M
+M = D
+'''
+        self.out_stream.write(code)
     # Close the output file stream
     def close(self):
         self.out_stream.close()

@@ -25,9 +25,9 @@ def main():
     while vm_parser.has_more_commands():
         vm_parser.advance()
         
-        if vm_parser.command_type() == CommandType.C_PUSH:
+        if vm_parser.command_type() == CommandType.C_PUSH or vm_parser.command_type() == CommandType.C_POP:
             asm_writer.write_push_pop(vm_parser.command_type(), vm_parser.get_tokens())
-        
+
 
 if __name__ == '__main__':
     main()
