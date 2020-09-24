@@ -1,4 +1,5 @@
 push constant 17
 push constant 11
 push local 10
-pop local 5
+push static 5
+pop static 2

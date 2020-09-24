@@ -1,3 +1,4 @@
+
 // push constant 17
 @17
 D = A
@@ -6,6 +7,7 @@ A = M
 M = D
 @SP
 M = M + 1
+
 // push constant 11
 @11
 D = A
@@ -14,6 +16,7 @@ A = M
 M = D
 @SP
 M = M + 1
+
 // push local 10
 @10
 D = A
@@ -25,18 +28,21 @@ A = M
 M = D
 @SP
 M = M + 1
-// pop local 5
-@5
-D = A
-@LCL
-D = D + M
+
+// push static 5
+@Codes.5
+D = M
 @SP
 A = M
 M = D
 @SP
-M = M - 1
+M = M + 1
+
+// pop static 2
 @SP
-D = M
-A = A + 1
+M = M - 1
 A = M
+D = M
+
+@Codes.2
 M = D
