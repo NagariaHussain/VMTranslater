@@ -39,7 +39,7 @@ A = M
 M = D
 @SP
 M = M + 1
-''' 
+'''
             elif tokens['arg1'] in ('local', 'argument', 'this', 'that'):
                 # push segment i
                 code = f'''
@@ -60,6 +60,21 @@ M = M + 1
                 code = f'''
 // push static {tokens['arg2']}
 @{self.file_name}.{tokens['arg2']}
+D = M
+@SP
+A = M
+M = D
+@SP
+M = M + 1
+'''
+            elif tokens['arg1'] == 'temp':
+                # push temp i
+                code = f'''
+// push temp {tokens['arg2']}
+@{tokens['arg2']}
+D = A
+@5
+A = D + A
 D = M
 @SP
 A = M
@@ -100,7 +115,27 @@ D = M
 @{self.file_name}.{tokens['arg2']}
 M = D
 '''
+            elif tokens['arg1'] == 'temp':
+                code = f'''
+// pop temp {tokens['arg2']}
+@{tokens['arg2']}
+D = A
+@5
+D = D + A
+@SP
+A = M
+M = D
+@SP
+M = M - 1
+@SP
+D = M
+A = A + 1
+A = M
+M = D
+'''
+        # Write the code to ouput stream
         self.out_stream.write(code)
+
     # Close the output file stream
     def close(self):
         self.out_stream.close()
