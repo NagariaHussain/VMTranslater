@@ -1,20 +1,9 @@
-// push temp 4
-@4
-D = A
-@5
-A = D + A
-D = M
-@SP
-A = M
-M = D
-@SP
-M = M + 1
 
-// pop temp 6
-@6
+// pop local 3
+@3
 D = A
-@5
-D = D + A
+@LCL
+D = D + M
 @SP
 A = M
 M = D
@@ -26,8 +15,8 @@ A = A + 1
 A = M
 M = D
 
-// push pointer 1
-@THAT
+// push static 5
+@Codes.5
 D = M
 @SP
 A = M
@@ -35,11 +24,18 @@ M = D
 @SP
 M = M + 1
 
-// pop pointer 0
+// pop local 3
+@3
+D = A
+@LCL
+D = D + M
+@SP
+A = M
+M = D
 @SP
 M = M - 1
-A = M
+@SP
 D = M
-
-@THIS 
+A = A + 1
+A = M
 M = D

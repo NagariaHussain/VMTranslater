@@ -1,4 +1,5 @@
-push temp 4
-pop temp 6
-push pointer 1
-pop pointer 0
+        // start of the file   
+        pop local 3
+    push static 5
+// Push to the stack
+    pop local 3

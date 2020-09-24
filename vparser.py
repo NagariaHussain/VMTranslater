@@ -1,10 +1,11 @@
 # The command type Enum
 from command_type import CommandType
 
+
 class Parser:
     '''Parses each VM command into its lexical elements'''
 
-    # Opens the input file/stream and 
+    # Opens the input file/stream and
     # gets ready to parse it
     def __init__(self, in_path):
         # Open file sream
@@ -12,20 +13,27 @@ class Parser:
 
     # Are there more commands in input?
     def has_more_commands(self):
-        # TODO: consider comments and empty lines
-        
         # Read a line from the input stream
         line = self.in_stream.readline()
 
         # If the line is non-empty
         if line:
+            # Clean the line
+            line = line.strip(" ").rstrip("\n")
+
+            # Check for comments
+            if line.startswith("//"):
+                # Ignore this line and look for more commands
+                # Recursive call
+                return self.has_more_commands()
+
             # Set this to the current command
             self.current_line = line
             return True
 
         # Nothing left to read
         return False
-    
+
     # Reads the next command from the input
     # and makes it the current command
     def advance(self):
@@ -34,7 +42,7 @@ class Parser:
         # Tokenize the current command
         self.tokenize()
 
-    # Returns a constant representing 
+    # Returns a constant representing
     # a command type
     def command_type(self):
         if len(self.tokens) == 1:
@@ -53,7 +61,7 @@ class Parser:
     def get_arg2(self):
         return self.tokens['arg2']
 
-    # tokenize the input lines    
+    # tokenize the input lines
     def tokenize(self):
         self.tokens = {}
 
