@@ -26,8 +26,11 @@ def main():
         vm_parser.advance()
         
         if vm_parser.command_type() == CommandType.C_PUSH or vm_parser.command_type() == CommandType.C_POP:
+            # Generate PUSH/POP asm Code
             asm_writer.write_push_pop(vm_parser.command_type(), vm_parser.get_tokens())
-        
 
+        elif vm_parser.command_type() == CommandType.C_ARITHMETIC:
+            # Generate Arithmetic asm Code
+            asm_writer.write_arithmetic(vm_parser.get_arg1())
 if __name__ == '__main__':
     main()
