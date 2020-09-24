@@ -82,6 +82,31 @@ M = D
 @SP
 M = M + 1
 '''
+            elif tokens['arg1'] == 'pointer':
+                if tokens['arg2'] == '0':
+                    # push pointer 0
+                    code = f'''
+// push pointer 0
+@THIS
+D = M
+@SP
+A = M
+M = D
+@SP
+M = M + 1
+'''
+                else:
+                    # push pointer 1
+                    code = f'''
+// push pointer 1
+@THAT
+D = M
+@SP
+A = M
+M = D
+@SP
+M = M + 1
+'''
         # If the command type is pop
         elif command_type == CommandType.C_POP:
             # pop segment i
@@ -131,6 +156,31 @@ M = M - 1
 D = M
 A = A + 1
 A = M
+M = D
+'''
+            elif tokens['arg1'] == 'pointer':
+                if tokens['arg2'] == '0':
+                    # pop pointer 0
+                    code = f'''
+// pop pointer 0
+@SP
+M = M - 1
+A = M
+D = M
+
+@THIS 
+M = D
+'''
+                else:
+                    # pop pointer 1
+                    code = f'''
+// pop pointer 1
+@SP
+M = M - 1
+A = M
+D = M
+
+@THAT 
 M = D
 '''
         # Write the code to ouput stream
