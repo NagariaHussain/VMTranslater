@@ -1,3 +1,5 @@
+// label WHILE_LOOP
+(WHILE_LOOP)
 
 // push constant 5
 @5
@@ -8,8 +10,8 @@ M = D
 @SP
 M = M + 1
 
-// push constant 7
-@7
+// push constant 3
+@3
 D = A
 @SP
 A = M
@@ -17,55 +19,59 @@ M = D
 @SP
 M = M + 1
 
-// add
-@SP
-M = M - 1
-A = M
-D = M
-@SP
-M = M - 1
-A = M
-M = D + M
-@SP
-M = M + 1
-
-// pop local 0
-@0
+// push constant 3
+@3
 D = A
-@LCL
-D = D + M
-@SP
-A = M
-M = D
-@SP
-M = M - 1
-@SP
-D = M
-A = A + 1
-A = M
-M = D
-
-// push static 5
-@Codes.5
-D = M
 @SP
 A = M
 M = D
 @SP
 M = M + 1
 
-// pop argument 5
-@5
-D = A
-@ARG
-D = D + M
+// eq
+@SP
+M = M-1
+A = M
+D = M
+// D becomes y
+
+@SP
+M = M-1
+A = M
+D = M-D
+
+// D becomes x - y
+@TRUE_eq_0
+// Jump if x == y
+D;JEQ
+
+// Jump unconditionally
+@FALSE_eq_0
+0;JMP
+
+(TRUE_eq_0)
 @SP
 A = M
-M = D
+M = -1
+
+@END_eq_0
+0;JMP
+
+(FALSE_eq_0)
+@SP
+A = M
+M = 0
+
+(END_eq_0)
+// SP++;
+@SP
+M = M + 1
+
+// if-goto label
 @SP
 M = M - 1
-@SP
-D = M
-A = A + 1
 A = M
-M = D
+D = M
+
+@WHILE_LOOP
+D;JLT

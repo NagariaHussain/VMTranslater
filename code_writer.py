@@ -408,6 +408,39 @@ M = D
         # Write the code to ouput stream
         self.out_stream.write(code)
 
+    # Translate label command
+    def write_label(self, label):
+        # Create label line with comment
+        code = f"// label {label}\n({label})\n"
+
+        # Write to the output file
+        self.out_stream.write(code)
+
+    # Translate goto command
+    def write_goto(self, label):
+        # Create code string for goto command
+        code = f"// goto {label}\n@{label}\n0;JMP"
+
+        # Write to the output file
+        self.out_stream.write(code)
+
+    # Translate if-goto command
+    def write_if(self, label):
+        # Create code string for if-goto command
+        code = f'''
+// if-goto label
+@SP
+M = M - 1
+A = M
+D = M
+
+@{label}
+D;JLT
+'''
+
+        # Write to the output file
+        self.out_stream.write(code)
+
     # Close the output file stream
     def close(self):
         self.out_stream.close()
