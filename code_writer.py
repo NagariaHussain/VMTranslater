@@ -411,7 +411,7 @@ M = D
     # Translate label command
     def write_label(self, label):
         # Create label line with comment
-        code = f"// label {label}\n({label})\n"
+        code = f"\n// label {label}\n({label})\n"
 
         # Write to the output file
         self.out_stream.write(code)
@@ -419,7 +419,7 @@ M = D
     # Translate goto command
     def write_goto(self, label):
         # Create code string for goto command
-        code = f"// goto {label}\n@{label}\n0;JMP"
+        code = f"\n// goto {label}\n@{label}\n0;JMP"
 
         # Write to the output file
         self.out_stream.write(code)
@@ -435,7 +435,7 @@ A = M
 D = M
 
 @{label}
-D;JLT
+D;JNE
 '''
 
         # Write to the output file

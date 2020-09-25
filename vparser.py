@@ -19,7 +19,7 @@ class Parser:
         # If the line is non-empty
         if line:
             # Clean the line
-            line = line.strip(" ").rstrip("\n")
+            line = self.clean_line(line)
 
             # Check for comments
             if line.startswith("//"):
@@ -119,3 +119,17 @@ class Parser:
     # get tokens
     def get_tokens(self):
         return self.tokens
+
+    # clean the line
+    def clean_line(self, line):
+        # Remove inline comments if any
+        if "//" in line:
+            line = line[:line.index("//")]
+
+        # Remove whitespaces
+        line = line.strip(" ")
+
+        # Remove any newline character
+        line = line.rstrip("\n")
+
+        return line
