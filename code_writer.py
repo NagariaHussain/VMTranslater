@@ -20,6 +20,8 @@ class CodeWriter:
             "lt": 0
         }
 
+        self.return_count = 0
+
     # Emits code for arithmetic
     def write_arithmetic(self, operation):
         if operation == "add":
@@ -439,6 +441,212 @@ D;JNE
 '''
 
         # Write to the output file
+        self.out_stream.write(code)
+
+    # Write function command's translation
+    def write_function(self, function_name, nvars):
+        code = f'''
+// function {function_name} {nvars}     
+({function_name})
+@{nvars}   
+D = A
+({function_name + "$local$loop"})
+
+@{function_name + "$local$end"}
+D;JLE
+
+@SP
+A = M
+M = 0
+@SP
+M = M + 1
+
+@{function_name + "$local$loop"}
+D = D - 1
+0;JMP
+({function_name + "$local$end"})
+'''
+        self.out_stream.write(code)
+
+    # Write the call command translation
+    def write_call(self, function_name, nargs):
+        code = f'''
+// call {function_name} {nargs}
+
+// push retAddrLabel
+@{self.file_name}$return.{self.return_count}
+D = A
+
+@SP
+A = M
+M = D
+
+@SP
+M = M + 1
+
+// push LCL
+@LCL
+D = M
+
+// SP++;
+@SP
+A = M
+M = D
+
+@SP
+M = M + 1
+
+// push ARG
+@ARG
+D = M
+
+// SP++;
+@SP
+A = M
+M = D
+
+@SP
+M = M + 1
+
+// push THIS
+@THIS
+D = M
+
+// SP++;
+@SP
+A = M
+M = D
+
+@SP
+M = M + 1
+
+// push THAT
+@THAT
+D = M
+
+// SP++;
+@SP
+A = M
+M = D
+
+@SP
+M = M + 1
+
+// ARG = SP - 5 - nargs
+@5
+D = A
+
+@SP
+D = M - D
+
+@{nargs}
+D = D - A
+
+@ARG 
+M = D
+
+// LCL = SP
+@SP
+D = M
+
+@LCL
+M = D
+
+// goto functionName
+@{function_name}
+0;JMP
+
+({self.file_name}$return.{self.return_count})
+'''
+        self.return_count += 1
+        self.out_stream.write(code)
+    
+    # Write return commands translation
+    def write_return(self):
+        code = f'''
+// return
+
+// endFrame = LCL
+@LCL
+D = M
+
+@R13
+M = D
+
+// retAddr = *(endFrame - 5)
+@5
+D = D - A
+A = D
+D = M
+
+@R14
+M = D
+
+// *ARG = pop()
+@SP
+M = M - 1
+A = M
+D = M
+
+@ARG
+A = M
+M = D
+
+// SP = ARG + 1
+@ARG
+D = M
+
+@SP
+M = D + 1
+
+// THAT = *(endFrame - 1)
+@R13
+A = M - 1
+D = M
+
+@THAT
+M = D
+
+// THIS = *(endFrame - 2)
+@2
+D = A
+
+@R13
+D = M - D
+A = D
+D = M
+
+@THIS
+M = D
+
+// ARG = *(endFrame - 3)
+@3
+D = A
+
+@R13
+D = M - D
+A = D
+D = M
+
+@ARG
+M = D
+
+// LCL = *(endFrame - 4)
+@4
+D = A
+
+@R13
+D = M - D
+A = D
+D = M
+
+@LCL
+M = D
+
+@R14
+A = M
+0;JMP
+'''
         self.out_stream.write(code)
 
     # Close the output file stream

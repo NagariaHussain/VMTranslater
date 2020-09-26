@@ -1,7 +1,10 @@
-label WHILE_LOOP // A comment
-// Another comment
-push constant 5
-push constant 3
-push constant 3     // Lots of comments here
-eq // comment for eq
-if-goto WHILE_LOOP // comment for comment testing
+function SimpleFunction.test 2
+push local 0
+push local 1
+add
+not
+push argument 0
+add
+push argument 1
+sub
+return

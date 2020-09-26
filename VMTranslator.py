@@ -49,5 +49,17 @@ def main():
         elif vm_parser.command_type() == CommandType.C_IF:
             # Generate if-goto asm Code
             asm_writer.write_if(vm_parser.get_arg1())
+
+        elif vm_parser.command_type() == CommandType.C_FUNCTION:
+            # Generate function asm Code
+            asm_writer.write_function(vm_parser.get_arg1(), vm_parser.get_arg2())
+        
+        elif vm_parser.command_type() == CommandType.C_CALL:
+            # Generate call asm code
+            asm_writer.write_call(vm_parser.get_arg1(), vm_parser.get_arg2())
+        
+        elif vm_parser.command_type() == CommandType.C_RETURN:
+            # Generate return asm code
+            asm_writer.write_return()
 if __name__ == '__main__':
     main()
