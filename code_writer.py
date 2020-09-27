@@ -648,7 +648,24 @@ A = M
 0;JMP
 '''
         self.out_stream.write(code)
+    
+    def write_bootstrap_code(self):
+        code = f'''
+// Bootstrap code
+// SP = 256
+@256
+D = A
 
+@SP
+M = D
+'''
+        self.out_stream.write(code)
+
+        # Write: call Sys.init
+        self.write_call("Sys.init", "0")
+    
+    def set_file_name(self, new_filename):
+        self.file_name = new_filename
     # Close the output file stream
     def close(self):
         self.out_stream.close()
